@@ -1,13 +1,13 @@
 # .gitignore — Aurora
-# Evita subir información sensible al repositorio.
+# Evitar subir información sensible al repositorio.
 
-# Credenciales y variables de entorno (NUNCA al repo)
+# Credenciales y variables de entorno 
 .env
 .env.*
 *.env
 # Único permitido: la plantilla SIN valores reales
 !.env.example
-# Volcados que generan los scripts (mismos IDs que el .env)
+# Volcados que generan los scripts 
 vector_stores.env
 master_store.env
 
@@ -30,7 +30,7 @@ service-account*.json
 
 # Base de conocimiento — contenido propietario del curso
 # Los PDFs ya están subidos a OpenAI (objetos file-…); la app NO los necesita
-# en el repo. Publicarlos sería filtrar propiedad intelectual de Paula Yépez.
+
 kb/
 *.pdf
 
@@ -40,7 +40,7 @@ node_modules/
 .pnp.*
 .yarn/*
 
-# Build / salida compilada (Render la genera con `npm run build`)
+# Build 
 dist/
 build/
 *.tsbuildinfo

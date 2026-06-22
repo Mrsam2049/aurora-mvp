@@ -84,3 +84,27 @@ npm start
 El comando `build` compila TypeScript a `dist/` y `start` ejecuta el servidor
 compilado. El servicio no arranca si falta alguna variable de entorno
 obligatoria.
+
+## Seguridad
+
+### Controles implementados
+
+| Área | Mecanismo |
+|---|---|
+| Aislamiento de datos | Row-Level Security (RLS) en Supabase; cada consulta filtra por `user_id` |
+| Headers HTTP | Helmet con CSP estricta, HSTS y `X-Frame-Options` |
+| CORS | Lista blanca explícita vía `ALLOWED_ORIGINS`; el widget valida el origen del iframe |
+| Rate limiting | `express-rate-limit` en rutas de chat y autenticación |
+| Validación de entrada | Zod en todos los endpoints; límites de longitud en mensajes |
+| Sanitización de salida | DOMPurify antes de cualquier `innerHTML` en el cliente |
+| Errores | Los errores internos solo se registran en servidor; el cliente recibe mensajes genéricos |
+| Caché | `Cache-Control: no-store` en rutas del portal privado |
+| Variables de entorno | `required()` en arranque: el servidor falla rápido si falta alguna clave |
+
+### Requisitos antes de desplegar
+
+1. **`ALLOWED_ORIGINS`** — listar únicamente los dominios reales (Kajabi, dominio propio). No usar `*`.
+2. **`NODE_ENV=production`** — activa el modo estricto de errores y desactiva logs de depuración.
+3. **Claves de Supabase** — `SUPABASE_SERVICE_ROLE_KEY` solo se usa en el backend; nunca exponerla al cliente.
+4. **RLS activo** — verificar que las políticas RLS estén habilitadas en las tablas `conversations` y `messages` antes de ir a producción.
+5. **HTTPS** — el proveedor de hosting debe forzar HTTPS; la cabecera HSTS solo tiene efecto sobre conexiones seguras.
